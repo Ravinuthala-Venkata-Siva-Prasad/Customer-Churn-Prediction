@@ -1,10 +1,21 @@
+
+# Web Framework
 fastapi==0.162.0
 uvicorn[standard]==0.54.0
 jinja2==3.1.6
 python-multipart
+
+# Data Processing
 pandas==3.1.0
 numpy==2.5.4
+
+# Machine Learning
 scikit-learn==1.9.1
-joblib==1.6.0
 xgboost==3.4.1
+joblib==1.6.0
+
+# Data Validation
 pydantic==2.14.2
+
+# Testing
+pytest==8.4.2
