@@ -1,27 +1,52 @@
+
 from pathlib import Path
 
-ROOT_DIR = Path(r"D:\Customer Churn Prediction").resolve().parent.parent
+# Project Root Directory
+ROOT_DIR = Path(__file__).resolve().parent.parent
 
-data_dir = ROOT_DIR/"data"
-raw_data_dir = data_dir/"raw"
-processed_data_dir = data_dir/"processed"
+# Data Directories
+DATA_DIR = ROOT_DIR / "data"
+RAW_DATA_DIR = DATA_DIR / "raw"
+PROCESSED_DATA_DIR = DATA_DIR / "processed"
 
-artifact_dir = ROOT_DIR/"artifacts"
-log_dir = ROOT_DIR/"logs"
+# Output Directories
+ARTIFACT_DIR = ROOT_DIR / "artifacts"
+LOG_DIR = ROOT_DIR / "logs"
 
-combined_data_path = processed_data_dir/"customer_churn_combined.csv"
-split_data_path = processed_data_dir/"train_test_split.plk"
+# Dataset Paths
+COMBINED_DATA_PATH = (
+    PROCESSED_DATA_DIR / "customer_churn_combined.csv"
+)
 
-model_path = artifact_dir/"model.pkl"
-model_result_path = artifact_dir/"model_results.json"
-metrics_path = artifact_dir/"metrics.json"
+SPLIT_DATA_PATH = (
+    PROCESSED_DATA_DIR / "train_test_split.pkl"
+)
 
-target_column = 'Churn'
-id_column = 'CustomerID'
+# Model Artifacts
+MODEL_PATH = ARTIFACT_DIR / "model.pkl"
+MODEL_RESULTS_PATH = ARTIFACT_DIR / "model_results.json"
+METRICS_PATH = ARTIFACT_DIR / "metrics.json"
 
-random_state = 42
-test_size = 0.20
-validation_size = 0.20
+# Dataset Configuration
+TARGET_COLUMN = "Churn"
+ID_COLUMN = "CustomerID"
 
-cv_folds = 3
-model_selection_metric = "f1"
+# Reproducibility
+RANDOM_STATE = 42
+
+# Dataset Splitting
+TEST_SIZE = 0.20
+VALIDATION_SIZE = 0.20
+
+# Model Training
+CV_FOLDS = 3
+MODEL_SELECTION_METRIC = "f1"
+
+# Create Required Directories
+for directory in [
+    RAW_DATA_DIR,
+    PROCESSED_DATA_DIR,
+    ARTIFACT_DIR,
+    LOG_DIR,
+]:
+    directory.mkdir(parents=True, exist_ok=True)

@@ -1,7 +1,21 @@
-@"
+# Large trained ML artifacts
+artifacts/*.pkl
+artifacts/*.joblib
+
+# Python
 .venv/
 venv/
 __pycache__/
 *.pyc
+.pytest_cache/
+
+# Node
+node_modules/
+
+# Secrets
 .env
-"@ | Set-Content .gitignore
+
+# Other
+logs/
+*.log
+.vscode/
