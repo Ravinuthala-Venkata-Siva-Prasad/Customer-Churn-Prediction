@@ -1,7 +1,19 @@
+# Exclude everything by default
+*
 
-.venv
-__pycache__
-.pytest_cache
-.git
-.ipynb_checkpoints
-logs
+# Include application files
+!app/
+!app/**
+
+# Include model
+!artifacts/
+!artifacts/model.pkl
+
+# Include dashboard analytics dataset
+!data/
+!data/processed/
+!data/processed/customer_churn_combined.csv
+
+# Include dependency and Docker files
+!requirements.txt
+!Dockerfile
