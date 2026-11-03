@@ -1,3 +1,4 @@
+```yaml
 name: Deploy Customer Churn Prediction to AWS EC2
 
 on:
@@ -22,7 +23,19 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v4
 
-      # Step 2: Authenticate with AWS using GitHub OIDC
+      # Step 2: Verify AWS Role Secret
+      - name: Check AWS Role ARN
+        env:
+          AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
+        run: |
+          if [ -z "$AWS_ROLE_ARN" ]; then
+            echo "ERROR: AWS_ROLE_ARN secret is missing"
+            exit 1
+          fi
+
+          echo "AWS_ROLE_ARN secret is configured"
+
+      # Step 3: Configure AWS credentials using GitHub OIDC
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -30,16 +43,17 @@ jobs:
           aws-region: ap-south-1
           role-session-name: GitHubActionsDeployment
 
-      # Step 3: Verify AWS authentication
+      # Step 4: Verify AWS authentication
       - name: Verify AWS identity
         run: |
           aws sts get-caller-identity
 
-      # Step 4: Deploy application using AWS Systems Manager
+      # Step 5: Deploy application to EC2 using SSM
       - name: Deploy application to EC2
         id: deploy
         shell: bash
         run: |
+
           COMMAND_ID=$(aws ssm send-command \
             --instance-ids "i-04b25870c245216f1" \
             --document-name "AWS-RunShellScript" \
@@ -59,22 +73,26 @@ jobs:
 
           echo "command_id=$COMMAND_ID" >> "$GITHUB_OUTPUT"
 
-          echo "Deployment command ID: $COMMAND_ID"
+          echo "Deployment Command ID: $COMMAND_ID"
 
-      # Step 5: Wait for EC2 deployment
+      # Step 6: Wait for EC2 deployment
       - name: Wait for deployment completion
         run: |
           aws ssm wait command-executed \
             --command-id "${{ steps.deploy.outputs.command_id }}" \
             --instance-id "i-04b25870c245216f1"
 
-      # Step 6: Display deployment logs
+      # Step 7: Display deployment logs
       - name: Display deployment logs
         if: always()
         run: |
+
           if [ -n "${{ steps.deploy.outputs.command_id }}" ]; then
+
             aws ssm get-command-invocation \
               --command-id "${{ steps.deploy.outputs.command_id }}" \
               --instance-id "i-04b25870c245216f1" \
               --output json || true
+
           fi
+```
